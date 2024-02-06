@@ -35,7 +35,7 @@ request src=traffic_light.ControlSystem
     dst=traffic_light.LightsGPIO 
     endpoint=lightsGpio.mode 
     method=FMode {
-        grant()
+        assert (bool.any([message.value == 0x101, message.value == 0x102, message.value == 0x104, message.value == 0x109, message.value == 0x10a, message.value == 0x10c, message.value == 0x201, message.value == 0x202, message.value == 0x204, message.value == 0x209, message.value == 0x20a, message.value == 0x20c, message.value == 0x401, message.value == 0x402, message.value == 0x409, message.value == 0x40a, message.value == 0x901, message.value == 0x902, message.value == 0x904, message.value == 0x909, message.value == 0x90a, message.value == 0x90c, message.value == 0xa01, message.value == 0xa02, message.value == 0xa04, message.value == 0xa09, message.value == 0xa0a, message.value == 0xa0c, message.value == 0xc01, message.value == 0xc02, message.value == 0xc09, message.value == 0xc0a]))
 }
 
 /*
