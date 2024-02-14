@@ -64,10 +64,19 @@ request src=traffic_light.Diagnostics dst=kl.core.Core {
     grant ()
 }
 
+request src = traffic_light.LightsGPIO, dst = traffic_light.Diagnostics
+{
+    match interface = traffic_light.DiagnosticsMessage, method = SendDiagnosticsMessage { grant () }
+}
 
 /* Response messages allowed. */
 response {
     grant ()
+}
+
+response src = traffic_light.Diagnostics, dst = traffic_light.LightsGPIO
+{
+    match interface = traffic_light.DiagnosticsMessage, method = SendDiagnosticsMessage { grant () }
 }
 
 /*
