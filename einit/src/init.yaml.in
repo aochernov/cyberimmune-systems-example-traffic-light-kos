@@ -12,3 +12,6 @@ entities:
 - name: traffic_light.LightsGPIO
 @INIT_LightsGPIO_ENTITY_CONNECTIONS@
 
+- name: traffic_light.Diagnostics
+@INIT_Diagnostics_ENTITY_CONNECTIONS@
+
