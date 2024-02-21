@@ -197,20 +197,15 @@ int main(int argc, const char *argv[]) {
     Connector_entity_res res;
     Connector_entity entity;
     Connector_entity_init(&entity, CreateIConfigurationMessageImpl());
-    char reqBuffer[Connector_entity_req_arena_size];
-    struct nk_arena reqArena = NK_ARENA_INITIALIZER(reqBuffer, reqBuffer + sizeof(reqBuffer));
-    char resBuffer[Connector_entity_res_arena_size];
-    struct nk_arena resArena = NK_ARENA_INITIALIZER(resBuffer, resBuffer + sizeof(resBuffer));
 
     fprintf(stderr, "Hello I'm Connector\n");
 
     while (1) {
         nk_req_reset(&req);
-        nk_arena_reset(&reqArena);
-        if (nk_transport_recv(&transport.base, &req.base_, &reqArena) == NK_EOK)
-            Connector_entity_dispatch( &entity, &req.base_, &reqArena, &res.base_, RTL_NULL);
+        if (nk_transport_recv(&transport.base, &req.base_, RTL_NULL) == NK_EOK)
+            Connector_entity_dispatch( &entity, &req.base_, RTL_NULL, &res.base_, RTL_NULL);
 
-        nk_transport_reply(&transport.base, &res.base_, &resArena);
+        nk_transport_reply(&transport.base, &res.base_, RTL_NULL);
     }
 
     return EXIT_SUCCESS;
