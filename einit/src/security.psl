@@ -11,9 +11,16 @@ use nk.base._
 /* Declaration of entities. */
 use EDL Einit
 use EDL kl.core.Core
+use EDL kl.VfsRamFs
+use EDL kl.VfsNet
+use EDL kl.rump.Dhcpcd
+use EDL kl.drivers.RAMDisk
+use EDL kl.drivers.BSP
+use EDL kl.drivers.GPIO
 
 use EDL traffic_light.ControlSystem
 use EDL traffic_light.LightsGPIO
+use EDL traffic_light.Connector
 
 /* Execution of entities allowed. */
 execute {
@@ -30,12 +37,15 @@ request src=traffic_light.ControlSystem dst=kl.core.Core {
     grant ()
 }
 
-
 request src=traffic_light.ControlSystem 
     dst=traffic_light.LightsGPIO 
     endpoint=lightsGpio.mode 
     method=FMode {
         grant()
+}
+
+request src = traffic_light.ControlSystem, dst = traffic_light.Connector {
+    match interface = traffic_light.ConfigurationMessage, method = SendConfiguration { grant () }
 }
 
 /*
@@ -55,14 +65,53 @@ request src=kl.core.Core {
     grant ()
 }
 
+request src=kl.rump.Dhcpcd {
+    grant ()
+}
+
+request src=kl.VfsRamFs {
+    grant ()
+}
+
 request src=traffic_light.LightsGPIO dst=kl.core.Core {
     grant ()
 }
 
+request src=traffic_light.Connector dst=kl.core.Core {
+    grant ()
+}
+
+request src=traffic_light.Connector dst=Einit {
+    grant()
+}
+
+request
+{
+    match dst = kl.core.Core
+    {
+        match src = Einit                                 { grant () }
+        match src = kl.drivers.BSP                        { grant () }
+        match src = kl.drivers.GPIO                       { grant () }
+        match src = kl.rump.Dhcpcd                        { grant () }
+        match src = kl.drivers.RAMDisk                    { grant () }
+        match src = kl.VfsNet                             { grant () }
+        match src = kl.VfsRamFs                           { grant () }
+    }
+
+    match src = traffic_light.Connector
+    {
+        match dst = kl.VfsRamFs                           { grant () }
+        match dst = kl.VfsNet                             { grant () }
+    }
+}
 
 /* Response messages allowed. */
 response {
     grant ()
+}
+
+response src = traffic_light.Connector, dst = traffic_light.ControlSystem {
+    match interface = traffic_light.ConfigurationMessage, method = SendConfiguration { grant () }
 }
 
 /*

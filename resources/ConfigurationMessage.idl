@@ -1,0 +1,14 @@
+package traffic_light.ConfigurationMessage
+
+struct TrafficLightConfiguration {
+    SInt32 configDirection;
+    SInt32 configRedDuration;
+    SInt32 configYellowDuration;
+    SInt32 configGreenDuration;
+    SInt32 configDisabled;
+}
+
+interface
+{
+    SendConfiguration(out TrafficLightConfiguration config);
+}
